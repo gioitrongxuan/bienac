@@ -51,17 +51,23 @@ aws s3api put-bucket-policy --bucket "$BUCKET" --policy "{
 
 # 4. Đồng bộ file
 #    - Asset (css/js/svg): cache 1 tuần
-#    - index.html: không cache để cập nhật có hiệu lực ngay
+#    - index.html + data/*.json: không cache để cập nhật có hiệu lực ngay
 echo "==> Upload files..."
 aws s3 sync "$SITE_DIR" "s3://${BUCKET}" \
   --delete \
   --exclude "*.sh" --exclude "*.md" --exclude ".*" \
-  --exclude "index.html" \
+  --exclude ".git/*" --exclude ".github/*" --exclude "scripts/*" \
+  --exclude "index.html" --exclude "data/*" \
   --cache-control "public, max-age=604800"
 
 aws s3 cp "$SITE_DIR/index.html" "s3://${BUCKET}/index.html" \
   --cache-control "no-cache, no-store, must-revalidate" \
   --content-type "text/html; charset=utf-8"
+
+aws s3 sync "$SITE_DIR/data" "s3://${BUCKET}/data" \
+  --delete \
+  --cache-control "no-cache, no-store, must-revalidate" \
+  --content-type "application/json; charset=utf-8"
 
 echo ""
 echo "✅ Hoàn tất! Website của bạn tại:"
