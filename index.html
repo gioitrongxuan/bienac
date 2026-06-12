@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bienac — Khoa học huyền ảo</title>
+  <meta name="description" content="bienac — kênh YouTube khoa học. Khám phá vũ trụ, tự nhiên và những điều kỳ diệu của khoa học qua những thước phim huyền ảo." />
+  <meta property="og:title" content="bienac — Khoa học huyền ảo" />
+  <meta property="og:description" content="Kênh YouTube khoa học bienac — nơi khoa học trở nên huyền ảo." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Nền hiệu ứng WebGL -->
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top">
+      <span class="brand-logo"><img src="assets/logo.svg" alt="logo bienac" /></span>
+      <span class="brand-name">bienac</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#videos">Video</a>
+      <a href="#about">Về bienac</a>
+      <a class="nav-cta" id="nav-subscribe" href="#" target="_blank" rel="noopener">Đăng ký kênh</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-logo" aria-hidden="true">
+        <img src="assets/logo.svg" alt="" />
+      </div>
+      <h1 class="hero-title">bien<span class="accent">ac</span></h1>
+      <p class="hero-tagline">Khoa học, kể bằng những thước phim huyền ảo.</p>
+      <p class="hero-sub">Vũ trụ &middot; Tự nhiên &middot; Những câu hỏi lớn của nhân loại</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" id="hero-subscribe" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>
+          Đăng ký kênh
+        </a>
+        <a class="btn btn-ghost" href="#videos">Khám phá video</a>
+      </div>
+      <div class="scroll-hint" aria-hidden="true"><span></span></div>
+    </section>
+
+    <!-- VIDEOS -->
+    <section class="section" id="videos">
+      <h2 class="section-title">Video <span class="accent">mới nhất</span></h2>
+      <p class="section-sub">Những hành trình khoa học gần đây trên kênh.</p>
+      <div class="video-grid" id="video-grid"><!-- render bằng JS --></div>
+      <div class="section-more">
+        <a class="btn btn-ghost" id="more-videos" href="#" target="_blank" rel="noopener">Xem tất cả trên YouTube →</a>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="about-card">
+        <div class="about-logo"><img src="assets/logo.svg" alt="logo bienac" /></div>
+        <div class="about-text">
+          <h2 class="section-title">Về <span class="accent">bienac</span></h2>
+          <p>
+            <strong>bienac</strong> là kênh YouTube về khoa học — nơi những kiến thức về vũ trụ,
+            vật lý, sinh học và tự nhiên được kể lại bằng hình ảnh huyền ảo và dễ hiểu.
+            Mỗi video là một chuyến phiêu lưu: từ ánh cực quang trên bầu trời đêm,
+            những con sóng của đại dương, đến các tinh vân cách chúng ta hàng triệu năm ánh sáng.
+          </p>
+          <p>
+            Nếu bạn yêu khoa học và cái đẹp, hãy đồng hành cùng bienac.
+          </p>
+          <a class="btn btn-primary" id="about-subscribe" href="#" target="_blank" rel="noopener">Theo dõi hành trình</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bảng chọn hiệu ứng nền -->
+  <aside class="fx-switcher" aria-label="Chọn hiệu ứng nền">
+    <button class="fx-toggle" id="fx-toggle" aria-expanded="true" title="Hiệu ứng nền">✦</button>
+    <div class="fx-options" id="fx-options" role="group">
+      <span class="fx-label">Hiệu ứng nền</span>
+      <button data-effect="aurora" title="Phím 1">🌌 Cực quang</button>
+      <button data-effect="waves"  title="Phím 2">🌊 Sóng biển</button>
+      <button data-effect="nebula" title="Phím 3">✨ Tinh vân</button>
+      <button data-effect="fireflies" title="Phím 4">🔆 Đom đóm</button>
+    </div>
+  </aside>
+
+  <footer class="site-footer">
+    <p>© <span id="year"></span> bienac — Khoa học huyền ảo.</p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
