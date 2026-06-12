@@ -18,13 +18,33 @@ thiết kế để deploy lên **AWS S3**.
 Hiệu ứng có parallax nhẹ theo chuột, tự giảm độ phân giải render (DPR ≤ 1.5)
 để tiết kiệm pin, và tôn trọng `prefers-reduced-motion`.
 
+## 🧪 Bảng tuần hoàn (`elements.html`)
+
+Trang bảng tuần hoàn đầy đủ 118 nguyên tố. Nhấn vào một nguyên tố để xem
+hiệu ứng đặc trưng của nó (vẽ bằng particle engine 2D canvas):
+
+- **Kim loại kiềm** (Li, Na, K, Rb, Cs): vụ nổ + ngọn lửa đúng màu thử lửa
+  (Li đỏ thẫm, Na vàng, K tím nhạt...).
+- **Kiềm thổ & Cu, B, S...**: ngọn lửa màu đặc trưng (Ba lục nhạt, Sr đỏ
+  thắm, Cu xanh lục-lam, S xanh lam...).
+- **Khí hiếm**: quả cầu phát sáng đúng màu ống phóng điện (Ne đỏ cam,
+  Ar tím, Xe xanh lam...).
+- **Halogen**: làn hơi khí màu (Cl vàng lục, I tím thăng hoa...).
+- **Kim loại chuyển tiếp**: tia lửa kim loại (Fe cam như que hàn, Ti trắng).
+- **Nguyên tố phóng xạ**: lõi sáng xanh phát tia bức xạ.
+- **Đặc biệt**: H nổ, N sương giá −196°C, C kim cương lấp lánh,
+  Hg giọt thủy ngân lỏng nảy, Au/Ag/Bi ánh kim lấp lánh, á kim tia điện.
+
 ## 📁 Cấu trúc
 
 ```
 bienac-website/
 ├── index.html                  # Trang chính
+├── elements.html               # 🧪 Bảng tuần hoàn với hiệu ứng nguyên tố
 ├── css/style.css               # Giao diện (dark + glassmorphism)
+├── css/elements.css            # Giao diện trang bảng tuần hoàn
 ├── js/effects.js               # Engine WebGL + 4 shader hiệu ứng
+├── js/elements.js              # Dữ liệu 118 nguyên tố + engine hạt 2D
 ├── js/main.js                  # Render trang (đọc cấu hình từ data/)
 ├── data/config.json            # ⚙️ Link kênh + danh sách video (sửa tay ở đây)
 ├── data/videos.json            # 🤖 Video mới nhất, CI tự lấy từ kênh

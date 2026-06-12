@@ -89,10 +89,12 @@
 
   // Thu gọn / mở bảng chọn
   const toggle = document.getElementById('fx-toggle');
-  toggle.addEventListener('click', () => {
-    const open = options.classList.toggle('collapsed') === false;
-    toggle.setAttribute('aria-expanded', String(open));
-  });
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const open = options.classList.toggle('collapsed') === false;
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  }
 
   /* -------------------------------------- Liên kết + lưới video --- */
   const PLACEHOLDER_GRADIENTS = [
@@ -113,6 +115,7 @@
 
   function renderVideos(config, videos) {
     const grid = document.getElementById('video-grid');
+    if (!grid) return;
     grid.innerHTML = '';
 
     videos.forEach((v, i) => {
@@ -159,7 +162,8 @@
   })();
 
   /* ----------------------------------------------------- Khác ----- */
-  document.getElementById('year').textContent = new Date().getFullYear();
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // Header đổi nền khi cuộn
   const header = document.querySelector('.site-header');
