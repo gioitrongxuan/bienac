@@ -116,6 +116,8 @@
   justify-content: center;
   padding: 20px;
 }
+/* display:flex ở trên đè mất [hidden] mặc định của trình duyệt */
+.el-modal[hidden] { display: none; }
 .el-backdrop {
   position: absolute;
   inset: 0;
