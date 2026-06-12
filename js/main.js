@@ -76,6 +76,9 @@
   }
   selectEffect(initial, true);
 
+  // Cho bong bóng hiện tượng vật lý (js/bubble.js) đổi hiệu ứng nền
+  window.bienacSelectEffect = (name) => selectEffect(name, false);
+
   buttons.forEach((b) => {
     b.addEventListener('click', () => selectEffect(b.dataset.effect, false));
   });
