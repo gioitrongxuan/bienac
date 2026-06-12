@@ -5,13 +5,17 @@
   'use strict';
 
   /* ------------------------------------------------------------------
-   * CẤU HÌNH — chỉnh các giá trị dưới đây cho đúng kênh của bạn
+   * CẤU HÌNH — sửa trong data/config.json (không cần đụng vào file này).
+   * DEFAULTS chỉ là phương án dự phòng khi không tải được config.json.
+   *
+   * Thứ tự ưu tiên danh sách video:
+   *   1. data/config.json → videos có điền id  (sửa tay)
+   *   2. data/videos.json                       (CI tự lấy từ kênh YouTube)
+   *   3. DEFAULTS bên dưới                      (placeholder)
    * ------------------------------------------------------------------ */
-  const CONFIG = {
-    // Link kênh YouTube của bạn
+  const DEFAULTS = {
     channelUrl: 'https://www.youtube.com/@bienac',
-    // Danh sách video hiển thị ở mục "Video mới nhất".
-    // Điền id = mã video YouTube (phần sau ?v= trong link) để hiện thumbnail thật.
+    maxVideos: 6,
     videos: [
       { id: '', title: 'Cực quang sinh ra như thế nào?',            tag: 'Vật lý' },
       { id: '', title: 'Vì sao đại dương có sóng?',                  tag: 'Tự nhiên' },
@@ -21,6 +25,31 @@
       { id: '', title: 'Thời gian có trôi như nhau ở mọi nơi?',      tag: 'Vật lý' },
     ],
   };
+
+  async function fetchJson(url) {
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (res.ok) return await res.json();
+    } catch (e) { /* offline / file:// — dùng dự phòng */ }
+    return null;
+  }
+
+  async function loadConfig() {
+    const cfg = await fetchJson('data/config.json');
+    return Object.assign({}, DEFAULTS, cfg || {});
+  }
+
+  async function loadVideos(config) {
+    const max = Number(config.maxVideos) > 0 ? Number(config.maxVideos) : DEFAULTS.maxVideos;
+    const manual = (config.videos || []).filter((v) => v && v.id);
+    if (manual.length) return manual.slice(0, max);
+    if (config.autoFetchVideos !== false) {
+      const auto = await fetchJson('data/videos.json');
+      if (Array.isArray(auto) && auto.length) return auto.slice(0, max);
+    }
+    const fallback = (config.videos && config.videos.length) ? config.videos : DEFAULTS.videos;
+    return fallback.slice(0, max);
+  }
 
   const EFFECT_KEY = 'bienac-effect';
   const DEFAULT_EFFECT = 'aurora';
@@ -65,14 +94,7 @@
     toggle.setAttribute('aria-expanded', String(open));
   });
 
-  /* ------------------------------------------------- Liên kết ----- */
-  ['nav-subscribe', 'hero-subscribe', 'about-subscribe', 'more-videos'].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.href = CONFIG.channelUrl + (id === 'more-videos' ? '/videos' : '?sub_confirmation=1');
-  });
-
-  /* ---------------------------------------------- Lưới video ------ */
-  const grid = document.getElementById('video-grid');
+  /* -------------------------------------- Liên kết + lưới video --- */
   const PLACEHOLDER_GRADIENTS = [
     'linear-gradient(135deg, #04293f, #0b7a6e)',
     'linear-gradient(135deg, #061b3a, #1e4fa0)',
@@ -82,34 +104,59 @@
     'linear-gradient(135deg, #2a0b30, #b03a8a)',
   ];
 
-  CONFIG.videos.forEach((v, i) => {
-    const a = document.createElement('a');
-    a.className = 'video-card';
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.href = v.id ? `https://www.youtube.com/watch?v=${v.id}` : CONFIG.channelUrl + '/videos';
+  function renderLinks(config) {
+    ['nav-subscribe', 'hero-subscribe', 'about-subscribe', 'more-videos'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.href = config.channelUrl + (id === 'more-videos' ? '/videos' : '?sub_confirmation=1');
+    });
+  }
 
-    const thumb = document.createElement('div');
-    thumb.className = 'video-thumb';
-    if (v.id) {
-      const img = document.createElement('img');
-      img.loading = 'lazy';
-      img.alt = v.title;
-      img.src = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
-      thumb.appendChild(img);
-    } else {
-      thumb.style.background = PLACEHOLDER_GRADIENTS[i % PLACEHOLDER_GRADIENTS.length];
-      thumb.innerHTML = '<span class="thumb-mark">▶</span>';
-    }
+  function renderVideos(config, videos) {
+    const grid = document.getElementById('video-grid');
+    grid.innerHTML = '';
 
-    const meta = document.createElement('div');
-    meta.className = 'video-meta';
-    meta.innerHTML = `<span class="video-tag">${v.tag}</span><h3>${v.title}</h3>`;
+    videos.forEach((v, i) => {
+      const a = document.createElement('a');
+      a.className = 'video-card';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.href = v.id ? `https://www.youtube.com/watch?v=${v.id}` : config.channelUrl + '/videos';
 
-    a.appendChild(thumb);
-    a.appendChild(meta);
-    grid.appendChild(a);
-  });
+      const thumb = document.createElement('div');
+      thumb.className = 'video-thumb';
+      if (v.id) {
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.alt = v.title;
+        img.src = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+        thumb.appendChild(img);
+      } else {
+        thumb.style.background = PLACEHOLDER_GRADIENTS[i % PLACEHOLDER_GRADIENTS.length];
+        thumb.innerHTML = '<span class="thumb-mark">▶</span>';
+      }
+
+      const meta = document.createElement('div');
+      meta.className = 'video-meta';
+      const tag = document.createElement('span');
+      tag.className = 'video-tag';
+      tag.textContent = v.tag || 'Video';
+      const h3 = document.createElement('h3');
+      h3.textContent = v.title;
+      meta.appendChild(tag);
+      meta.appendChild(h3);
+
+      a.appendChild(thumb);
+      a.appendChild(meta);
+      grid.appendChild(a);
+      observer.observe(a);
+    });
+  }
+
+  (async () => {
+    const config = await loadConfig();
+    renderLinks(config);
+    renderVideos(config, await loadVideos(config));
+  })();
 
   /* ----------------------------------------------------- Khác ----- */
   document.getElementById('year').textContent = new Date().getFullYear();

@@ -22,30 +22,72 @@ Hiệu ứng có parallax nhẹ theo chuột, tự giảm độ phân giải ren
 
 ```
 bienac-website/
-├── index.html        # Trang chính
-├── css/style.css     # Giao diện (dark + glassmorphism)
-├── js/effects.js     # Engine WebGL + 4 shader hiệu ứng
-├── js/main.js        # Cấu hình kênh, lưới video, bảng chọn hiệu ứng
-├── assets/logo.svg   # Logo bienac (vector)
-└── deploy-s3.sh      # Script deploy lên S3
+├── index.html                  # Trang chính
+├── css/style.css               # Giao diện (dark + glassmorphism)
+├── js/effects.js               # Engine WebGL + 4 shader hiệu ứng
+├── js/main.js                  # Render trang (đọc cấu hình từ data/)
+├── data/config.json            # ⚙️ Link kênh + danh sách video (sửa tay ở đây)
+├── data/videos.json            # 🤖 Video mới nhất, CI tự lấy từ kênh
+├── scripts/fetch-videos.mjs    # Script lấy video qua RSS feed YouTube
+├── assets/logo.svg             # Logo bienac (vector)
+├── .github/workflows/deploy.yml# CI/CD: deploy S3 + tự cập nhật video
+└── deploy-s3.sh                # Script deploy thủ công lên S3
 ```
 
-## ⚙️ Tùy chỉnh nội dung
+## ⚙️ Tùy chỉnh nội dung — `data/config.json`
 
-Mở `js/main.js`, sửa phần `CONFIG` ở đầu file:
+Mọi link đều nằm trong `data/config.json`, **không cần sửa code**:
 
-```js
-const CONFIG = {
-  channelUrl: 'https://www.youtube.com/@bienac',  // link kênh của bạn
-  videos: [
-    // Điền id video YouTube (phần sau ?v= trong link) để hiện thumbnail thật
-    { id: 'dQw4w9WgXcQ', title: 'Tên video', tag: 'Vũ trụ' },
-    ...
-  ],
-};
+```json
+{
+  "channelUrl": "https://www.youtube.com/@bienac",
+  "channelId": "",
+  "autoFetchVideos": true,
+  "maxVideos": 6,
+  "videos": [
+    { "id": "dQw4w9WgXcQ", "title": "Tên video", "tag": "Vũ trụ" }
+  ]
+}
 ```
 
-Khi `id` để trống, thẻ video hiển thị thumbnail gradient và dẫn về trang kênh.
+Thứ tự ưu tiên danh sách video hiển thị:
+
+1. **Sửa tay**: video trong `config.json` có điền `id` (phần sau `?v=` trong link)
+   → luôn được ưu tiên.
+2. **Tự động**: nếu không có video sửa tay và `autoFetchVideos: true`,
+   trang đọc `data/videos.json` — file này được CI tự cập nhật từ RSS feed
+   của kênh (xem mục CI/CD bên dưới).
+3. **Dự phòng**: khi cả hai đều trống, hiển thị thumbnail gradient placeholder
+   dẫn về trang kênh.
+
+`channelId` (dạng `UC...`) có thể để trống — script sẽ tự tìm từ `channelUrl`,
+nhưng điền sẵn sẽ ổn định hơn. Lấy id tại trang kênh → About → Share channel
+→ Copy channel ID.
+
+Chạy thử việc lấy video tự động ở local:
+
+```bash
+node scripts/fetch-videos.mjs   # ghi kết quả vào data/videos.json
+```
+
+## 🔄 CI/CD — GitHub Actions
+
+Workflow `.github/workflows/deploy.yml` tự động:
+
+- **Push lên `master`** → lấy video mới nhất của kênh rồi deploy lên S3.
+- **Theo lịch 6 tiếng/lần** → tự làm mới `data/videos.json` và deploy
+  (website luôn hiện video mới mà không cần đụng vào repo).
+- **Bấm tay** trong tab Actions (workflow_dispatch).
+
+Khai báo secrets trong **Settings → Secrets and variables → Actions**:
+
+| Secret | Bắt buộc | Mô tả |
+|--------|----------|-------|
+| `AWS_ACCESS_KEY_ID` | ✅ | Khóa IAM có quyền ghi S3 |
+| `AWS_SECRET_ACCESS_KEY` | ✅ | Secret key tương ứng |
+| `S3_BUCKET` | ✅ | Tên bucket, vd `bienac-website` |
+| `AWS_REGION` | — | Mặc định `ap-southeast-1` |
+| `CLOUDFRONT_DISTRIBUTION_ID` | — | Điền nếu dùng CloudFront, để tự xóa cache |
 
 ## 🚀 Deploy lên AWS S3
 
