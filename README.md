@@ -18,6 +18,21 @@ thiết kế để deploy lên **AWS S3**.
 Hiệu ứng có parallax nhẹ theo chuột, tự giảm độ phân giải render (DPR ≤ 1.5)
 để tiết kiệm pin, và tôn trọng `prefers-reduced-motion`.
 
+### ⚛ Bong bóng hiện tượng vật lý
+
+Một FAB hình bong bóng tự bay lơ lửng quanh màn hình (kéo-thả được,
+thả tay sẽ bay tiếp theo quán tính). Nhấn vào bong bóng để mở danh sách
+4 hiện tượng vật lý làm hiệu ứng nền (cũng vẽ bằng WebGL shader):
+
+| Hiện tượng | Mô tả |
+|------------|-------|
+| ⚡ Hồ quang điện | Sợi plasma nhiễu loạn giữa hai điện cực nóng đỏ |
+| 🌩 Sấm sét | Trời giông, sét đánh ngẫu nhiên kèm chớp lóe mây và mưa |
+| 🌈 Tia phân cực | Chùm tia quay theo định luật Malus + màu lưỡng chiết |
+| 🌊 Giao thoa sóng | Hai nguồn sóng tạo vân giao thoa cùng pha/ngược pha |
+
+Lựa chọn được lưu vào `localStorage` như các hiệu ứng khác.
+
 ## 🧪 Bảng tuần hoàn (`elements.html`)
 
 Trang bảng tuần hoàn đầy đủ 118 nguyên tố. Nhấn vào một nguyên tố để xem

@@ -453,9 +453,114 @@ body {
   font-size: 0.9rem;
 }
 
+/* --------------------------- FAB bong bóng hiện tượng vật lý ----- */
+.phys-bubble {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 70;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(154, 107, 255, 0.4);
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.05) 38%, transparent 60%),
+    radial-gradient(circle at 72% 78%, rgba(30, 227, 227, 0.35), transparent 55%),
+    rgba(22, 16, 48, 0.45);
+  color: var(--text);
+  cursor: grab;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 0 26px rgba(154, 107, 255, 0.4),
+    inset 0 0 16px rgba(255, 255, 255, 0.14);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
+  transition: box-shadow 0.25s ease;
+}
+.phys-bubble:hover {
+  box-shadow:
+    0 0 38px rgba(154, 107, 255, 0.6),
+    inset 0 0 18px rgba(255, 255, 255, 0.2);
+}
+.phys-bubble.grabbing { cursor: grabbing; }
+.phys-bubble.open {
+  box-shadow:
+    0 0 42px rgba(30, 227, 227, 0.55),
+    inset 0 0 18px rgba(255, 255, 255, 0.2);
+}
+.phys-icon {
+  display: block;
+  font-size: 1.6rem;
+  line-height: 56px;
+  text-shadow: 0 0 14px rgba(154, 107, 255, 0.9);
+  animation: phys-spin 14s linear infinite;
+}
+@keyframes phys-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.phys-menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 69;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(154, 107, 255, 0.3);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5), 0 0 26px rgba(154, 107, 255, 0.18);
+  transition: opacity 0.22s ease;
+  will-change: transform;
+}
+.phys-menu.collapsed {
+  opacity: 0;
+  pointer-events: none;
+}
+.phys-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0 4px 6px;
+}
+.phys-menu button {
+  font-family: var(--font);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: left;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.phys-menu button:hover {
+  color: var(--text);
+  background: rgba(154, 107, 255, 0.1);
+}
+.phys-menu button.active {
+  color: var(--violet);
+  background: rgba(154, 107, 255, 0.14);
+  border-color: rgba(154, 107, 255, 0.4);
+  box-shadow: 0 0 14px rgba(154, 107, 255, 0.25);
+}
+
 /* -------------------------------------------------- Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-logo img, .scroll-hint span { animation: none; }
+  .hero-logo img, .scroll-hint span, .phys-icon { animation: none; }
   .section, .video-card { transition: none; opacity: 1; transform: none; }
 }
