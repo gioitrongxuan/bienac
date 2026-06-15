@@ -637,6 +637,10 @@ body {
   .hero { padding: 120px 20px 80px; }
   .hero-actions { width: 100%; }
   .hero-actions .btn { flex: 1 1 auto; justify-content: center; }
+
+  /* Ẩn bong bóng hiện tượng vật lý trên điện thoại */
+  .phys-bubble,
+  .phys-menu { display: none !important; }
 }
 
 /* -------------------------------------------------- Reduced motion */
