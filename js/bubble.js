@@ -9,8 +9,6 @@
 (function () {
   'use strict';
   if (!window.BienacFX) return;
-  // Không hiển thị bong bóng vật lý trên điện thoại (màn hình nhỏ)
-  if (window.matchMedia('(max-width: 720px)').matches) return;
 
   const PHENOMENA = [
     { name: 'arc',          icon: '⚡', label: 'Hồ quang điện' },

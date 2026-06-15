@@ -638,9 +638,33 @@ body {
   .hero-actions { width: 100%; }
   .hero-actions .btn { flex: 1 1 auto; justify-content: center; }
 
-  /* Ẩn bong bóng hiện tượng vật lý trên điện thoại */
-  .phys-bubble,
-  .phys-menu { display: none !important; }
+  /* Trên điện thoại: bỏ icon ⚛, biến bong bóng thành "quả cầu điện" */
+  .phys-icon { display: none; }
+  .phys-bubble {
+    border-color: rgba(154, 107, 255, 0.55);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(220, 235, 255, 0.95) 0%, rgba(120, 180, 255, 0.55) 14%, transparent 32%),
+      radial-gradient(circle at 50% 50%, rgba(154, 107, 255, 0.45) 30%, transparent 62%),
+      radial-gradient(circle at 50% 50%, rgba(30, 227, 227, 0.3) 55%, transparent 80%),
+      rgba(22, 16, 48, 0.6);
+    box-shadow:
+      0 0 26px rgba(154, 107, 255, 0.6),
+      inset 0 0 22px rgba(120, 180, 255, 0.45);
+    animation: plasma-pulse 2.6s ease-in-out infinite;
+  }
+}
+
+@keyframes plasma-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 22px rgba(154, 107, 255, 0.55),
+      inset 0 0 18px rgba(120, 180, 255, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(30, 227, 227, 0.65),
+      inset 0 0 26px rgba(180, 210, 255, 0.6);
+  }
 }
 
 /* -------------------------------------------------- Reduced motion */
