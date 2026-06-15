@@ -57,6 +57,25 @@ function parseFeed(xml) {
   return videos;
 }
 
+/**
+ * Kiểm tra một video có phải Short hay không.
+ * RSS feed không phân biệt Short với video thường, nên ta thử mở URL
+ * dạng /shorts/<id>: Short thật trả 200, còn video thường bị redirect (3xx)
+ * sang trang /watch. Lỗi mạng → coi như không phải Short để khỏi bỏ sót.
+ */
+async function isShort(id) {
+  try {
+    const res = await fetch(`https://www.youtube.com/shorts/${id}`, {
+      method: 'HEAD',
+      headers: { 'user-agent': UA },
+      redirect: 'manual',
+    });
+    return res.status === 200;
+  } catch {
+    return false;
+  }
+}
+
 async function main() {
   const config = JSON.parse(await readFile(CONFIG_PATH, 'utf8'));
 
@@ -77,8 +96,19 @@ async function main() {
   const xml = await fetchText(feedUrl);
 
   const max = Number(config.maxVideos) > 0 ? Number(config.maxVideos) : 6;
-  const videos = parseFeed(xml).slice(0, max);
-  if (!videos.length) throw new Error('Feed không có video nào.');
+
+  // Lọc bỏ Short, chỉ giữ video thường, cho tới khi đủ `max` video.
+  const candidates = parseFeed(xml);
+  const videos = [];
+  for (const v of candidates) {
+    if (videos.length >= max) break;
+    if (await isShort(v.id)) {
+      console.log(`Bỏ qua Short: ${v.title}`);
+      continue;
+    }
+    videos.push(v);
+  }
+  if (!videos.length) throw new Error('Feed không có video thường nào (toàn Short?).');
 
   await writeFile(OUT_PATH, JSON.stringify(videos, null, 2) + '\n', 'utf8');
   console.log(`Đã ghi ${videos.length} video vào data/videos.json`);
