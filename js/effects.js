@@ -1,7 +1,9 @@
 /* =====================================================================
  * bienac — engine hiệu ứng nền WebGL
- * 4 hiệu ứng: aurora (cực quang), waves (sóng biển),
- *             nebula (tinh vân), fireflies (đom đóm ánh sáng)
+ * 4 hiệu ứng chính: aurora (cực quang), waves (sóng biển),
+ *                   nebula (tinh vân), fireflies (đom đóm ánh sáng)
+ * 4 hiện tượng vật lý (chọn qua bong bóng FAB): arc (hồ quang điện),
+ *   lightning (sấm sét), polarized (tia phân cực), interference (giao thoa)
  * ===================================================================== */
 (function () {
   'use strict';
@@ -175,11 +177,174 @@
     }
   `;
 
+  /* ------------------------------------------- HỒ QUANG ĐIỆN ------ */
+  const FRAG_ARC = GLSL_COMMON + `
+    void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+      vec2 p  = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / u_resolution.y;
+      p.x += (u_mouse.x - 0.5) * 0.08;
+
+      vec3 col = mix(vec3(0.008, 0.008, 0.025), vec3(0.025, 0.02, 0.06), uv.y);
+
+      // Khói plasma bốc lên phía trên hồ quang
+      float smoke = fbm(vec2(p.x * 1.8, p.y * 1.4 - u_time * 0.12));
+      col += vec3(0.10, 0.08, 0.22) * smoke * smoothstep(-0.3, 0.6, p.y) * 0.35;
+
+      vec2 A = vec2(-0.55, -0.28), B = vec2(0.55, -0.28);
+      float flickAll = 0.75 + 0.25 * noise(vec2(u_time * 22.0, 1.0));
+
+      // Ba sợi hồ quang nhiễu loạn chồng lên nhau
+      for (int i = 0; i < 3; i++) {
+        float fi = float(i);
+        float s = clamp((p.x - A.x) / (B.x - A.x), 0.0, 1.0);
+        float env = sin(s * 3.14159);
+        float lift = env * (0.34 + fi * 0.045);
+        float jit = (fbm(vec2(s * 6.5 + fi * 19.0, u_time * (5.0 + fi * 2.6))) - 0.5)
+                  * 0.40 * (0.25 + env);
+        float path = A.y + lift + jit;
+        float dx = max(max(A.x - p.x, p.x - B.x), 0.0);
+        float d = sqrt(dx * dx + (p.y - path) * (p.y - path));
+        float flick = 0.55 + 0.45 * noise(vec2(u_time * (18.0 + fi * 7.0), fi * 13.0));
+        float core = 0.0045 / (d + 0.0035);
+        vec3 tint = mix(vec3(0.55, 0.65, 1.0), vec3(0.85, 0.55, 1.0), fi * 0.5);
+        col += tint * core * flick * (1.0 - fi * 0.25);
+        col += vec3(1.0) * core * core * 0.12 * flick;
+      }
+
+      // Hai đầu điện cực nóng đỏ
+      col += vec3(1.0, 0.55, 0.25) * exp(-length(p - A) * 26.0) * 1.2;
+      col += vec3(1.0, 0.55, 0.25) * exp(-length(p - B) * 26.0) * 1.2;
+
+      // Ánh sáng hắt ra toàn cảnh, nhấp nháy theo hồ quang
+      col += vec3(0.30, 0.38, 0.85) * exp(-length(p - vec2(0.0, 0.05)) * 1.9) * 0.16 * flickAll;
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  /* ------------------------------------------------- SẤM SÉT ------ */
+  const FRAG_LIGHTNING = GLSL_COMMON + `
+    void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+      vec2 p  = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / u_resolution.y;
+      p.x += (u_mouse.x - 0.5) * 0.1;
+
+      // Bầu trời giông và mây vần vũ
+      vec3 col = mix(vec3(0.012, 0.014, 0.035), vec3(0.045, 0.055, 0.10), uv.y);
+      float cl = fbm(vec2(p.x * 1.5 + u_time * 0.05, uv.y * 2.6 + u_time * 0.02));
+      col = mix(col, vec3(0.06, 0.07, 0.12), cl * smoothstep(0.35, 1.0, uv.y));
+
+      float boltSum = 0.0, flash = 0.0;
+      for (int i = 0; i < 2; i++) {
+        float fi = float(i);
+        float speed = 0.42 + fi * 0.19;
+        float cycle = floor(u_time * speed + fi * 0.5);
+        float ft    = fract(u_time * speed + fi * 0.5);
+        float seed  = hash(vec2(cycle, fi + 3.0));
+        float strike = step(0.30, seed);                     // ~70% chu kỳ có sét
+        float x0 = (hash(vec2(cycle, fi + 7.0)) - 0.5) * 1.7;
+        float prog = smoothstep(0.0, 0.05, ft);              // sét lao xuống cực nhanh
+        float vis = strike * step(ft, 0.20)
+                  * (0.55 + 0.45 * noise(vec2(u_time * 55.0, fi * 9.0)));
+        float xb = x0 + (fbm(vec2(uv.y * 5.5 + seed * 130.0, cycle * 9.1 + fi * 31.0)) - 0.5)
+                 * 0.85 * (1.0 - uv.y);
+        float d = abs(p.x - xb);
+        float reach = step(1.0 - prog * 1.05, uv.y);
+        boltSum += (0.009 / (d + 0.007)) * vis * reach;
+        // nhánh sét phụ mảnh hơn
+        float xb2 = xb + (fbm(vec2(uv.y * 9.0 + seed * 60.0, cycle * 4.7)) - 0.5) * 0.5 * (1.0 - uv.y);
+        boltSum += (0.004 / (abs(p.x - xb2) + 0.006)) * vis * reach * 0.5;
+        flash += strike * exp(-ft * 8.0);
+      }
+
+      col += vec3(0.78, 0.82, 1.0) * boltSum;
+      col += vec3(0.32, 0.36, 0.60) * flash * (0.35 + cl * 0.9);   // mây lóe sáng
+
+      // Mưa rơi chéo
+      vec2 rc = vec2(p.x * 46.0 + p.y * 9.0, 0.0);
+      float colH = hash(vec2(floor(rc.x), 5.0));
+      float ry = fract(uv.y * 2.2 + u_time * (1.1 + colH * 0.9) + colH * 17.0);
+      float rain = step(0.965, colH * 0.5 + hash(vec2(floor(rc.x), floor(ry * 3.0))) * 0.5)
+                 * smoothstep(0.0, 0.12, ry) * (1.0 - smoothstep(0.5, 1.0, ry));
+      col += vec3(0.45, 0.55, 0.75) * rain * 0.10;
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  /* -------------------------------------------- TIA PHÂN CỰC ------ */
+  const FRAG_POLARIZED = GLSL_COMMON + `
+    void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+      vec2 p  = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / u_resolution.y;
+      p += (u_mouse - 0.5) * 0.1;
+      float t = u_time * 0.25;
+      float r = length(p);
+      float a = atan(p.y, p.x);
+
+      vec3 col = vec3(0.012, 0.010, 0.032);
+      col += vec3(0.9, 0.95, 1.0) * stars(gl_FragCoord.xy, 0.998, 1.2) * 0.4;
+
+      // Chùm tia quay theo định luật Malus: I = I0·cos²θ
+      float beams = pow(abs(cos(a * 2.0 - t * 1.3)), 8.0)
+                  + pow(abs(cos(a * 3.0 + t * 0.9 + 1.3)), 16.0) * 0.7;
+      float fan = beams * exp(-r * 1.05);
+
+      // Màu quang phổ lưỡng chiết (như tinh thể dưới kính phân cực)
+      float ph = fbm(p * 1.8 + t * 0.15) * 2.6 + r * 2.1 - t * 0.8;
+      vec3 spectrum = 0.5 + 0.5 * cos(6.28318 * (ph * 0.35 + vec3(0.0, 0.33, 0.67)));
+      col += spectrum * fan * 0.9;
+
+      // Vân giao thoa đồng tâm mờ
+      float rings = 0.5 + 0.5 * sin(r * 15.0 - t * 2.4);
+      col += spectrum * rings * rings * 0.10 * exp(-r * 0.95);
+
+      // Nguồn sáng trung tâm
+      col += vec3(0.92, 0.95, 1.0) * exp(-r * 7.0) * (0.55 + 0.2 * sin(t * 3.2));
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  /* ------------------------------------------ GIAO THOA SÓNG ------ */
+  const FRAG_INTERFERENCE = GLSL_COMMON + `
+    void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+      vec2 p  = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / u_resolution.y;
+      p += (u_mouse - 0.5) * 0.08;
+      float t = u_time;
+
+      vec3 col = mix(vec3(0.008, 0.012, 0.035), vec3(0.012, 0.03, 0.07), uv.y);
+
+      // Hai nguồn sóng dao động nhẹ
+      vec2 s1 = vec2(-0.48 + 0.05 * sin(t * 0.4), -0.05 + 0.04 * cos(t * 0.33));
+      vec2 s2 = vec2( 0.48 + 0.05 * cos(t * 0.36), -0.05 + 0.04 * sin(t * 0.41));
+      float d1 = length(p - s1);
+      float d2 = length(p - s2);
+
+      float k = 26.0, w = 2.6;
+      float amp = 0.5 * (sin(d1 * k - t * w) / (1.0 + d1 * 2.2)
+                       + sin(d2 * k - t * w) / (1.0 + d2 * 2.2));
+      float inten = amp * amp * 4.0;        // vân sáng nơi hai sóng cùng pha
+
+      vec3 tint = mix(vec3(0.10, 0.90, 0.85), vec3(0.45, 0.35, 1.0), uv.y);
+      col += tint * inten * 0.55;
+      col += vec3(1.0) * pow(inten, 3.0) * 0.10;
+
+      // Hai nguồn phát sáng nhấp nhô
+      float pulse = 0.7 + 0.3 * sin(t * w);
+      col += vec3(0.3, 1.0, 0.9) * exp(-d1 * 9.0) * pulse;
+      col += vec3(0.55, 0.45, 1.0) * exp(-d2 * 9.0) * (1.4 - pulse);
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
   const SHADERS = {
-    aurora:    FRAG_AURORA,
-    waves:     FRAG_WAVES,
-    nebula:    FRAG_NEBULA,
-    fireflies: FRAG_FIREFLIES,
+    aurora:       FRAG_AURORA,
+    waves:        FRAG_WAVES,
+    nebula:       FRAG_NEBULA,
+    fireflies:    FRAG_FIREFLIES,
+    arc:          FRAG_ARC,
+    lightning:    FRAG_LIGHTNING,
+    polarized:    FRAG_POLARIZED,
+    interference: FRAG_INTERFERENCE,
   };
 
   class FXEngine {
