@@ -99,6 +99,28 @@
     });
   }
 
+  /* ----------------------------------------- Menu mobile (nav) ---- */
+  const navToggle = document.getElementById('nav-toggle');
+  const siteNav = document.getElementById('site-nav');
+  if (navToggle && siteNav) {
+    const setNav = (open) => {
+      siteNav.classList.toggle('open', open);
+      navToggle.setAttribute('aria-expanded', String(open));
+      navToggle.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
+    };
+    navToggle.addEventListener('click', () => {
+      setNav(!siteNav.classList.contains('open'));
+    });
+    // Đóng menu khi chọn một mục
+    siteNav.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => setNav(false));
+    });
+    // Đóng menu khi nhấn Esc
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setNav(false);
+    });
+  }
+
   /* -------------------------------------- Liên kết + lưới video --- */
   const PLACEHOLDER_GRADIENTS = [
     'linear-gradient(135deg, #04293f, #0b7a6e)',
