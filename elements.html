@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bienac — Bảng tuần hoàn huyền ảo</title>
-  <meta name="description" content="Bảng tuần hoàn các nguyên tố hóa học với hiệu ứng đặc trưng: ngọn lửa màu, vụ nổ kim loại kiềm, khí hiếm phát sáng, phóng xạ…" />
+  <title data-cms-text="elements.metaTitle">Bienac — Bảng tuần hoàn huyền ảo</title>
+  <meta name="description" data-cms-attr="content:elements.metaDescription" content="Bảng tuần hoàn các nguyên tố hóa học với hiệu ứng đặc trưng: ngọn lửa màu, vụ nổ kim loại kiềm, khí hiếm phát sáng, phóng xạ…" />
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,20 +20,20 @@
   <header class="site-header">
     <a class="brand" href="index.html">
       <span class="brand-logo"><img src="assets/logo.svg" alt="logo Bienac" /></span>
-      <span class="brand-name">Bienac</span>
+      <span class="brand-name" data-cms="site.brand">Bienac</span>
     </a>
     <nav class="site-nav">
-      <a href="index.html#videos">Video</a>
-      <a href="elements.html" class="nav-active">Nguyên tố</a>
-      <a href="index.html#about">Về Bienac</a>
-      <a class="nav-cta" id="nav-subscribe" href="#" target="_blank" rel="noopener">Đăng ký kênh</a>
+      <a href="index.html#videos" data-cms="nav.videos">Video</a>
+      <a href="elements.html" class="nav-active" data-cms="nav.elements">Nguyên tố</a>
+      <a href="index.html#about" data-cms="nav.about">Về Bienac</a>
+      <a class="nav-cta" id="nav-subscribe" href="#" target="_blank" rel="noopener" data-cms="nav.subscribe">Đăng ký kênh</a>
     </nav>
   </header>
 
   <main class="pt-page">
     <section class="section visible pt-section">
-      <h1 class="section-title">Bảng <span class="accent">tuần hoàn</span></h1>
-      <p class="section-sub">
+      <h1 class="section-title" data-cms="elements.title">Bảng <span class="accent">tuần hoàn</span></h1>
+      <p class="section-sub" data-cms="elements.sub">
         Chạm vào một nguyên tố để xem hiệu ứng đặc trưng của nó —
         ngọn lửa màu, vụ nổ, ánh sáng khí hiếm hay tia phóng xạ.
       </p>
@@ -81,9 +81,10 @@
   </aside>
 
   <footer class="site-footer">
-    <p>© <span id="year"></span> Bienac — Khoa học huyền ảo.</p>
+    <p data-cms="site.footer">© <span id="year"></span> Bienac — Khoa học huyền ảo.</p>
   </footer>
 
+  <script src="js/content.js"></script>
   <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
   <script src="js/elements.js"></script>

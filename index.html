@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bienac — Khoa học huyền ảo</title>
-  <meta name="description" content="Bienac — kênh YouTube khoa học. Khám phá vũ trụ, tự nhiên và những điều kỳ diệu của khoa học qua những thước phim huyền ảo." />
-  <meta property="og:title" content="Bienac — Khoa học huyền ảo" />
-  <meta property="og:description" content="Kênh YouTube khoa học Bienac — nơi khoa học trở nên huyền ảo." />
+  <title data-cms-text="home.metaTitle">Bienac — Khoa học huyền ảo</title>
+  <meta name="description" data-cms-attr="content:home.metaDescription" content="Bienac — kênh YouTube khoa học. Khám phá vũ trụ, tự nhiên và những điều kỳ diệu của khoa học qua những thước phim huyền ảo." />
+  <meta property="og:title" data-cms-attr="content:home.ogTitle" content="Bienac — Khoa học huyền ảo" />
+  <meta property="og:description" data-cms-attr="content:home.ogDescription" content="Kênh YouTube khoa học Bienac — nơi khoa học trở nên huyền ảo." />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,13 +23,13 @@
   <header class="site-header">
     <a class="brand" href="#top">
       <span class="brand-logo"><img src="assets/logo.svg" alt="logo Bienac" /></span>
-      <span class="brand-name">Bienac</span>
+      <span class="brand-name" data-cms="site.brand">Bienac</span>
     </a>
     <nav class="site-nav">
-      <a href="#videos">Video</a>
-      <a href="elements.html">Nguyên tố</a>
-      <a href="#about">Về Bienac</a>
-      <a class="nav-cta" id="nav-subscribe" href="#" target="_blank" rel="noopener">Đăng ký kênh</a>
+      <a href="#videos" data-cms="nav.videos">Video</a>
+      <a href="elements.html" data-cms="nav.elements">Nguyên tố</a>
+      <a href="#about" data-cms="nav.about">Về Bienac</a>
+      <a class="nav-cta" id="nav-subscribe" href="#" target="_blank" rel="noopener" data-cms="nav.subscribe">Đăng ký kênh</a>
     </nav>
   </header>
 
@@ -39,26 +39,26 @@
       <div class="hero-logo" aria-hidden="true">
         <img src="assets/logo.svg" alt="" />
       </div>
-      <h1 class="hero-title">Bien<span class="accent">ac</span></h1>
-      <p class="hero-tagline">Chuyện trên Trái Đất 🌏.</p>
-      <p class="hero-sub">Vũ trụ &middot; Tự nhiên &middot; Và những câu hỏi</p>
+      <h1 class="hero-title" data-cms="home.hero.title">Bien<span class="accent">ac</span></h1>
+      <p class="hero-tagline" data-cms="home.hero.tagline">Chuyện trên Trái Đất 🌏.</p>
+      <p class="hero-sub" data-cms="home.hero.sub">Vũ trụ &middot; Tự nhiên &middot; Và những câu hỏi</p>
       <div class="hero-actions">
         <a class="btn btn-primary" id="hero-subscribe" href="#" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12l-6.2 3.6z"/></svg>
-          Đăng ký kênh
+          <span data-cms="home.hero.subscribe">Đăng ký kênh</span>
         </a>
-        <a class="btn btn-ghost" href="#videos">Khám phá video</a>
+        <a class="btn btn-ghost" href="#videos" data-cms="home.hero.explore">Khám phá video</a>
       </div>
       <div class="scroll-hint" aria-hidden="true"><span></span></div>
     </section>
 
     <!-- VIDEOS -->
     <section class="section" id="videos">
-      <h2 class="section-title">Video <span class="accent">mới nhất</span></h2>
-      <p class="section-sub">Những hành trình khoa học gần đây trên kênh.</p>
+      <h2 class="section-title" data-cms="home.videos.title">Video <span class="accent">mới nhất</span></h2>
+      <p class="section-sub" data-cms="home.videos.sub">Những hành trình khoa học gần đây trên kênh.</p>
       <div class="video-grid" id="video-grid"><!-- render bằng JS --></div>
       <div class="section-more">
-        <a class="btn btn-ghost" id="more-videos" href="#" target="_blank" rel="noopener">Xem tất cả trên YouTube →</a>
+        <a class="btn btn-ghost" id="more-videos" href="#" target="_blank" rel="noopener" data-cms="home.videos.more">Xem tất cả trên YouTube →</a>
       </div>
     </section>
 
@@ -67,17 +67,19 @@
       <div class="about-card">
         <div class="about-logo"><img src="assets/logo.svg" alt="logo Bienac" /></div>
         <div class="about-text">
-          <h2 class="section-title">Về <span class="accent">Bienac</span></h2>
-          <p>
-            <strong>Bienac</strong> là kênh YouTube về khoa học — nơi những kiến thức về vũ trụ,
-            vật lý, sinh học và tự nhiên được kể lại bằng hình ảnh dễ hiểu.
-            Mỗi video là một chuyến phiêu lưu: từ ánh cực quang trên bầu trời đêm,
-            những con sóng của đại dương, đến các tinh vân cách chúng ta hàng triệu năm ánh sáng.
-          </p>
-          <p>
-            Nếu bạn yêu khoa học và cái đẹp, hãy đồng hành cùng Bienac.
-          </p>
-          <a class="btn btn-primary" id="about-subscribe" href="#" target="_blank" rel="noopener">Theo dõi hành trình</a>
+          <h2 class="section-title" data-cms="home.about.title">Về <span class="accent">Bienac</span></h2>
+          <div data-cms="home.about.body">
+            <p>
+              <strong>Bienac</strong> là kênh YouTube về khoa học — nơi những kiến thức về vũ trụ,
+              vật lý, sinh học và tự nhiên được kể lại bằng hình ảnh dễ hiểu.
+              Mỗi video là một chuyến phiêu lưu: từ ánh cực quang trên bầu trời đêm,
+              những con sóng của đại dương, đến các tinh vân cách chúng ta hàng triệu năm ánh sáng.
+            </p>
+            <p>
+              Nếu bạn yêu khoa học và cái đẹp, hãy đồng hành cùng Bienac.
+            </p>
+          </div>
+          <a class="btn btn-primary" id="about-subscribe" href="#" target="_blank" rel="noopener" data-cms="home.about.button">Theo dõi hành trình</a>
         </div>
       </div>
     </section>
@@ -96,9 +98,10 @@
   </aside>
 
   <footer class="site-footer">
-    <p>© <span id="year"></span> Bienac — Khoa học huyền ảo.</p>
+    <p data-cms="site.footer">© <span id="year"></span> Bienac — Khoa học huyền ảo.</p>
   </footer>
 
+  <script src="js/content.js"></script>
   <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
   <script src="js/bubble.js"></script>

@@ -1,0 +1,52 @@
+{
+  "_huongdan": "Sửa text của website tại đây — KHÔNG cần đụng vào code. Dùng **chữ** để in đậm, *chữ* để tô màu nhấn, và {year} sẽ tự thành năm hiện tại. Lưu file là website tự cập nhật (CI deploy lên S3).",
+
+  "site": {
+    "brand": "Bienac",
+    "footer": "© {year} Bienac — Khoa học huyền ảo."
+  },
+
+  "nav": {
+    "videos": "Video",
+    "elements": "Nguyên tố",
+    "about": "Về Bienac",
+    "subscribe": "Đăng ký kênh"
+  },
+
+  "home": {
+    "metaTitle": "Bienac — Khoa học huyền ảo",
+    "metaDescription": "Bienac — kênh YouTube khoa học. Khám phá vũ trụ, tự nhiên và những điều kỳ diệu của khoa học qua những thước phim huyền ảo.",
+    "ogTitle": "Bienac — Khoa học huyền ảo",
+    "ogDescription": "Kênh YouTube khoa học Bienac — nơi khoa học trở nên huyền ảo.",
+
+    "hero": {
+      "title": "Bien*ac*",
+      "tagline": "Chuyện trên Trái Đất 🌏.",
+      "sub": "Vũ trụ · Tự nhiên · Và những câu hỏi",
+      "subscribe": "Đăng ký kênh",
+      "explore": "Khám phá video"
+    },
+
+    "videos": {
+      "title": "Video *mới nhất*",
+      "sub": "Những hành trình khoa học gần đây trên kênh.",
+      "more": "Xem tất cả trên YouTube →"
+    },
+
+    "about": {
+      "title": "Về *Bienac*",
+      "body": [
+        "**Bienac** là kênh YouTube về khoa học — nơi những kiến thức về vũ trụ, vật lý, sinh học và tự nhiên được kể lại bằng hình ảnh dễ hiểu. Mỗi video là một chuyến phiêu lưu: từ ánh cực quang trên bầu trời đêm, những con sóng của đại dương, đến các tinh vân cách chúng ta hàng triệu năm ánh sáng.",
+        "Nếu bạn yêu khoa học và cái đẹp, hãy đồng hành cùng Bienac."
+      ],
+      "button": "Theo dõi hành trình"
+    }
+  },
+
+  "elements": {
+    "metaTitle": "Bienac — Bảng tuần hoàn huyền ảo",
+    "metaDescription": "Bảng tuần hoàn các nguyên tố hóa học với hiệu ứng đặc trưng: ngọn lửa màu, vụ nổ kim loại kiềm, khí hiếm phát sáng, phóng xạ…",
+    "title": "Bảng *tuần hoàn*",
+    "sub": "Chạm vào một nguyên tố để xem hiệu ứng đặc trưng của nó — ngọn lửa màu, vụ nổ, ánh sáng khí hiếm hay tia phóng xạ."
+  }
+}

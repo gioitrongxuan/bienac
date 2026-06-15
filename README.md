@@ -61,6 +61,8 @@ bienac-website/
 ├── js/effects.js               # Engine WebGL + 4 shader hiệu ứng
 ├── js/elements.js              # Dữ liệu 118 nguyên tố + engine hạt 2D
 ├── js/main.js                  # Render trang (đọc cấu hình từ data/)
+├── js/content.js               # ✍️ Đổ text từ data/content.json vào trang
+├── data/content.json           # ✍️ Tiêu đề / slogan / mọi text (sửa tay ở đây)
 ├── data/config.json            # ⚙️ Link kênh + danh sách video (sửa tay ở đây)
 ├── data/videos.json            # 🤖 Video mới nhất, CI tự lấy từ kênh
 ├── scripts/fetch-videos.mjs    # Script lấy video qua RSS feed YouTube
@@ -104,6 +106,54 @@ Chạy thử việc lấy video tự động ở local:
 ```bash
 node scripts/fetch-videos.mjs   # ghi kết quả vào data/videos.json
 ```
+
+## ✍️ Sửa text / tiêu đề / slogan — `data/content.json`
+
+Mọi đoạn chữ hiển thị trên web (tiêu đề, slogan, đoạn giới thiệu, menu,
+footer, cả tiêu đề SEO) đều nằm trong **`data/content.json`** —
+sửa ở đây là xong, **không cần đụng vào HTML/JS**. Lưu file → CI tự deploy
+lên S3 (hoặc chạy `./deploy-s3.sh`), web sẽ cập nhật text mới.
+
+Cú pháp viết (markdown rút gọn):
+
+| Bạn gõ | Hiển thị |
+|--------|----------|
+| `*chữ*` | chữ được **tô màu nhấn** (xanh ngọc) |
+| `**chữ**` | chữ **in đậm** |
+| `{year}` | tự thay bằng năm hiện tại (vd 2026) |
+
+Ví dụ đổi slogan ở đầu trang:
+
+```json
+{
+  "home": {
+    "hero": {
+      "title": "Bien*ac*",
+      "tagline": "Chuyện trên Trái Đất 🌏.",
+      "sub": "Vũ trụ · Tự nhiên · Và những câu hỏi"
+    }
+  }
+}
+```
+
+Phần `home.about.body` là **danh sách đoạn văn** — mỗi phần tử trong mảng
+là một đoạn `<p>` riêng:
+
+```json
+"about": {
+  "title": "Về *Bienac*",
+  "body": [
+    "Đoạn 1 …",
+    "Đoạn 2 …"
+  ]
+}
+```
+
+Cách nhanh nhất để sửa: mở `data/content.json` ngay trên GitHub (nút ✏️ *Edit*),
+sửa chữ, bấm *Commit*. CI lo phần còn lại.
+
+> Lưu ý: nếu vì lý do gì đó không tải được `content.json`, web vẫn hiển thị
+> text mặc định đã ghi sẵn trong HTML — không bao giờ bị trắng trang.
 
 ## 🔄 CI/CD — GitHub Actions
 
