@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bienac — Bảng tuần hoàn huyền ảo</title>
-  <meta name="description" content="Bảng tuần hoàn các nguyên tố hóa học với hiệu ứng đặc trưng: ngọn lửa màu, vụ nổ kim loại kiềm, khí hiếm phát sáng, phóng xạ…" />
+  <title>Bienac — Hiện tượng vật lý</title>
+  <meta name="description" content="Danh sách các hiện tượng vật lý và thiên nhiên kỳ ảo — cực quang, sóng biển, tinh vân, hồ quang điện, sấm sét, tia phân cực, giao thoa sóng. Nhấn để xem hiệu ứng." />
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/elements.css" />
+  <link rel="stylesheet" href="css/phenomena.css" />
 </head>
 <body>
   <!-- Nền hiệu ứng WebGL -->
@@ -24,49 +24,33 @@
     </a>
     <nav class="site-nav">
       <a href="index.html#videos">Video</a>
-      <a href="elements.html" class="nav-active">Nguyên tố</a>
-      <a href="phenomena.html">Hiện tượng</a>
+      <a href="elements.html">Nguyên tố</a>
+      <a href="phenomena.html" class="nav-active">Hiện tượng</a>
       <a href="index.html#about">Về Bienac</a>
       <a class="nav-cta" id="nav-subscribe" href="#" target="_blank" rel="noopener">Đăng ký kênh</a>
     </nav>
   </header>
 
-  <main class="pt-page">
-    <section class="section visible pt-section">
-      <h1 class="section-title">Bảng <span class="accent">tuần hoàn</span></h1>
+  <main class="ph-page">
+    <section class="section visible ph-section">
+      <h1 class="section-title">Hiện tượng <span class="accent">vật lý</span></h1>
       <p class="section-sub">
-        Chạm vào một nguyên tố để xem hiệu ứng đặc trưng của nó —
-        ngọn lửa màu, vụ nổ, ánh sáng khí hiếm hay tia phóng xạ.
+        Chạm vào một hiện tượng để xem nó sống dậy ngay trên nền màn hình —
+        từ cực quang, sóng biển đến hồ quang điện, sấm sét và giao thoa sóng.
       </p>
 
-      <div class="pt-legend" id="pt-legend" aria-hidden="true"><!-- render bằng JS --></div>
+      <div class="ph-legend" id="ph-legend" aria-hidden="true"><!-- render bằng JS --></div>
 
-      <div class="pt-scroll">
-        <div class="pt-grid" id="pt-grid" role="grid" aria-label="Bảng tuần hoàn các nguyên tố">
-          <!-- render bằng JS -->
-        </div>
+      <div class="ph-grid" id="ph-grid" aria-label="Danh sách hiện tượng vật lý">
+        <!-- render bằng JS -->
       </div>
     </section>
   </main>
 
-  <!-- Modal hiệu ứng nguyên tố -->
-  <div class="el-modal" id="el-modal" role="dialog" aria-modal="true" aria-labelledby="el-name" hidden>
-    <div class="el-backdrop" id="el-backdrop"></div>
-    <div class="el-card">
-      <button class="el-close" id="el-close" aria-label="Đóng">✕</button>
-      <canvas class="el-canvas" id="el-canvas" aria-hidden="true"></canvas>
-      <div class="el-info">
-        <div class="el-head">
-          <span class="el-symbol" id="el-symbol">?</span>
-          <div>
-            <h2 class="el-name" id="el-name">Nguyên tố</h2>
-            <p class="el-sub"><span id="el-number"></span> · <span id="el-category"></span></p>
-          </div>
-        </div>
-        <p class="el-desc" id="el-desc"></p>
-        <button class="btn btn-ghost el-replay" id="el-replay">↻ Chạy lại hiệu ứng</button>
-      </div>
-    </div>
+  <!-- Thẻ báo hiện tượng đang xem -->
+  <div class="ph-now" id="ph-now" role="status" aria-live="polite">
+    <span class="ph-now-label">Đang xem:</span>
+    <span class="ph-now-name" id="ph-now-name"></span>
   </div>
 
   <!-- Bảng chọn hiệu ứng nền -->
@@ -87,7 +71,7 @@
 
   <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/elements.js"></script>
+  <script src="js/phenomena.js"></script>
   <script src="js/bubble.js"></script>
 </body>
 </html>
