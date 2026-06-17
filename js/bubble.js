@@ -69,6 +69,9 @@
   }
 
   function step(now) {
+    requestAnimationFrame(step);
+    if (document.hidden) { last = now; return; } // nghỉ khi tab ẩn
+
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
 
@@ -98,7 +101,6 @@
     }
 
     bubble.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 
