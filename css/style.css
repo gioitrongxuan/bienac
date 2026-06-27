@@ -667,6 +667,28 @@ body {
   }
 }
 
+/* ------------------------------------------ Đề xuất nội dung ----- */
+.request-card {
+  margin-top: 44px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  padding: clamp(20px, 4vw, 44px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: relative;
+  overflow: hidden;
+}
+.request-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 0%, rgba(154, 107, 255, 0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 100%, rgba(30, 227, 227, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.giscus, .giscus-frame { width: 100%; }
+
 /* -------------------------------------------------- Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

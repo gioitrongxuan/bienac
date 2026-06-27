@@ -206,4 +206,6 @@
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.section, .video-card').forEach((el) => observer.observe(el));
+
+
 })();
