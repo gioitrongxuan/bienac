@@ -33,6 +33,7 @@
       <a href="#videos">Video</a>
       <a href="elements.html">Nguyên tố</a>
       <a href="phenomena.html">Hiện tượng</a>
+      <a href="#request">Đề xuất</a>
       <a href="#about">Về Bienac</a>
       <a class="nav-cta" id="nav-subscribe" href="#" target="_blank" rel="noopener">Đăng ký kênh</a>
     </nav>
@@ -64,6 +65,46 @@
       <div class="video-grid" id="video-grid"><!-- render bằng JS --></div>
       <div class="section-more">
         <a class="btn btn-ghost" id="more-videos" href="#" target="_blank" rel="noopener">Xem tất cả trên YouTube →</a>
+      </div>
+    </section>
+
+    <!-- ĐỀ XUẤT NỘI DUNG -->
+    <section class="section" id="request">
+      <h2 class="section-title">Bạn muốn xem <span class="accent">nội dung gì?</span></h2>
+      <p class="section-sub">Hãy để lại ý tưởng — Bienac đọc hết và sẽ cân nhắc cho video tiếp theo.</p>
+      <div class="request-card">
+        <form class="request-form" id="request-form"
+              action="https://formspree.io/f/YOUR_FORM_ID"
+              method="POST">
+          <div class="request-fields">
+            <div class="request-field">
+              <label for="req-topic">Chủ đề bạn muốn khám phá</label>
+              <input type="text" id="req-topic" name="topic"
+                     placeholder="VD: Tại sao sao neutron quay nhanh thế? Hiện tượng El Niño là gì?…"
+                     required autocomplete="off" />
+            </div>
+            <div class="request-field">
+              <label for="req-detail">Chia sẻ thêm (tuỳ chọn)</label>
+              <textarea id="req-detail" name="detail" rows="4"
+                        placeholder="Góc nhìn bạn muốn Bienac khai thác, hay điều bạn tò mò nhất về chủ đề này…"></textarea>
+            </div>
+            <div class="request-field request-field--inline">
+              <input type="email" id="req-email" name="email"
+                     placeholder="Email của bạn (nếu muốn được báo khi video ra)"
+                     autocomplete="email" />
+              <button type="submit" class="btn btn-primary request-btn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Gửi đề xuất
+              </button>
+            </div>
+          </div>
+          <p class="request-note">Thông tin chỉ dùng để Bienac liên hệ báo video — không spam, không chia sẻ.</p>
+        </form>
+        <div class="request-success" id="request-success" aria-live="polite">
+          <div class="request-success-icon">🌏</div>
+          <h3>Cảm ơn bạn!</h3>
+          <p>Bienac đã nhận được đề xuất. Hẹn gặp trong video tiếp theo nhé!</p>
+        </div>
       </div>
     </section>
 
