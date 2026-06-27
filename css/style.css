@@ -673,7 +673,7 @@ body {
   background: var(--glass);
   border: 1px solid var(--glass-border);
   border-radius: 28px;
-  padding: clamp(28px, 5vw, 52px);
+  padding: clamp(20px, 4vw, 44px);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   position: relative;
@@ -687,86 +687,7 @@ body {
               radial-gradient(ellipse at 20% 100%, rgba(30, 227, 227, 0.08) 0%, transparent 60%);
   pointer-events: none;
 }
-
-.request-form { position: relative; }
-.request-fields { display: flex; flex-direction: column; gap: 20px; }
-
-.request-field { display: flex; flex-direction: column; gap: 8px; }
-.request-field label {
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
-
-.request-field input,
-.request-field textarea {
-  font-family: var(--font);
-  font-size: 1rem;
-  color: var(--text);
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--glass-border);
-  border-radius: 14px;
-  padding: 14px 18px;
-  outline: none;
-  resize: vertical;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
-.request-field input::placeholder,
-.request-field textarea::placeholder { color: rgba(159,182,192,0.5); }
-.request-field input:focus,
-.request-field textarea:focus {
-  border-color: rgba(30, 227, 227, 0.5);
-  box-shadow: 0 0 0 3px rgba(30, 227, 227, 0.1);
-}
-
-.request-field--inline {
-  flex-direction: row;
-  align-items: stretch;
-  gap: 12px;
-}
-.request-field--inline input { flex: 1; }
-
-.request-btn {
-  white-space: nowrap;
-  border: none;
-  cursor: pointer;
-  font-family: var(--font);
-}
-
-.request-note {
-  margin-top: 14px;
-  font-size: 0.8rem;
-  color: rgba(159,182,192,0.6);
-}
-
-.request-success {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 24px;
-  gap: 12px;
-  position: relative;
-}
-.request-success.visible { display: flex; }
-.request-success-icon { font-size: 3.5rem; filter: drop-shadow(0 0 20px rgba(30,227,227,0.5)); }
-.request-success h3 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  background: linear-gradient(90deg, var(--mint), var(--cyan));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.request-success p { color: var(--text-dim); line-height: 1.7; }
-
-@media (max-width: 600px) {
-  .request-field--inline { flex-direction: column; }
-  .request-btn { width: 100%; justify-content: center; }
-}
+.giscus, .giscus-frame { width: 100%; }
 
 /* -------------------------------------------------- Reduced motion */
 @media (prefers-reduced-motion: reduce) {

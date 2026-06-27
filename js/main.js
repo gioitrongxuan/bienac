@@ -207,32 +207,5 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.section, .video-card').forEach((el) => observer.observe(el));
 
-  /* ----------------------------------------- Form đề xuất nội dung */
-  const reqForm = document.getElementById('request-form');
-  const reqSuccess = document.getElementById('request-success');
-  if (reqForm) {
-    reqForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = reqForm.querySelector('.request-btn');
-      btn.disabled = true;
-      btn.textContent = 'Đang gửi…';
 
-      try {
-        const res = await fetch(reqForm.action, {
-          method: 'POST',
-          body: new FormData(reqForm),
-          headers: { Accept: 'application/json' },
-        });
-        if (res.ok) {
-          reqForm.style.display = 'none';
-          reqSuccess.classList.add('visible');
-        } else {
-          throw new Error('server error');
-        }
-      } catch {
-        btn.disabled = false;
-        btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Thử lại';
-      }
-    });
-  }
 })();
