@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/elements.css" />
+  <link rel="stylesheet" href="css/phenomena.css" />
 </head>
 <body>
   <!-- Nền hiệu ứng WebGL -->
@@ -47,7 +48,26 @@
         </div>
       </div>
     </section>
+    <section class="section visible ph-section">
+      <h2 class="section-title">Hiện tượng <span class="accent">vật lý</span></h2>
+      <p class="section-sub">
+        Chạm vào một hiện tượng để xem nó sống dậy ngay trên nền màn hình —
+        từ cực quang, sóng biển đến hồ quang điện, sấm sét và giao thoa sóng.
+      </p>
+
+      <div class="ph-legend" id="ph-legend" aria-hidden="true"><!-- render bằng JS --></div>
+
+      <div class="ph-grid" id="ph-grid" aria-label="Danh sách hiện tượng vật lý">
+        <!-- render bằng JS -->
+      </div>
+    </section>
   </main>
+
+  <!-- Thẻ báo hiện tượng đang xem -->
+  <div class="ph-now" id="ph-now" role="status" aria-live="polite">
+    <span class="ph-now-label">Đang xem:</span>
+    <span class="ph-now-name" id="ph-now-name"></span>
+  </div>
 
   <!-- Modal hiệu ứng nguyên tố -->
   <div class="el-modal" id="el-modal" role="dialog" aria-modal="true" aria-labelledby="el-name" hidden>
@@ -88,6 +108,7 @@
   <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
   <script src="js/elements.js"></script>
+  <script src="js/phenomena.js"></script>
   <script src="js/bubble.js"></script>
 </body>
 </html>
