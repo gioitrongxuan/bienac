@@ -363,6 +363,11 @@
       this.start = performance.now();
       this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+      // Giới hạn nhịp vẽ — nền động không cần 60fps, đỡ tốn GPU/pin
+      this.frameInterval = 1000 / 40;
+      this.lastFrame = 0;
+      this.rendered = null; // shader đã vẽ gần nhất (cho chế độ giảm chuyển động)
+
       const gl = this.gl;
       const buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -431,29 +436,53 @@
 
     resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      this.canvas.width = Math.floor(window.innerWidth * dpr);
-      this.canvas.height = Math.floor(window.innerHeight * dpr);
-      if (this.gl) this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+      let w = Math.max(1, Math.floor(window.innerWidth * dpr));
+      let h = Math.max(1, Math.floor(window.innerHeight * dpr));
+      // Trần số điểm ảnh: shader fbm rất nặng, màn lớn/HiDPI sẽ giật nếu vẽ
+      // ở độ phân giải gốc. Canvas được CSS kéo full màn nên hạ nội bộ gần
+      // như không thấy khác biệt với một lớp nền mờ chuyển động.
+      const MAX_PIXELS = 1280 * 720;
+      const over = (w * h) / MAX_PIXELS;
+      if (over > 1) {
+        const s = Math.sqrt(over);
+        w = Math.max(1, Math.floor(w / s));
+        h = Math.max(1, Math.floor(h / s));
+      }
+      this.canvas.width = w;
+      this.canvas.height = h;
+      this.rendered = null; // buộc vẽ lại sau khi đổi kích thước
+      if (this.gl) this.gl.viewport(0, 0, w, h);
     }
 
     loop(now) {
-      const gl = this.gl;
-      if (gl && this.current) {
-        // Chuột di chuyển mượt theo quán tính
-        this.mouse.x += (this.mouse.tx - this.mouse.x) * 0.05;
-        this.mouse.y += (this.mouse.ty - this.mouse.y) * 0.05;
-
-        const t = this.reducedMotion ? 10.0 : (now - this.start) / 1000;
-        const e = this.current;
-        gl.useProgram(e.prog);
-        gl.enableVertexAttribArray(e.aPos);
-        gl.vertexAttribPointer(e.aPos, 2, gl.FLOAT, false, 0, 0);
-        gl.uniform1f(e.uTime, t);
-        gl.uniform2f(e.uRes, this.canvas.width, this.canvas.height);
-        gl.uniform2f(e.uMouse, this.mouse.x, this.mouse.y);
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
-      }
       requestAnimationFrame(this.loop);
+      const gl = this.gl;
+      if (!gl || !this.current) return;
+      if (document.hidden) return; // không vẽ khi tab ẩn
+
+      if (this.reducedMotion) {
+        // Giảm chuyển động: chỉ vẽ một khung tĩnh mỗi lần đổi hiệu ứng
+        if (this.rendered === this.current) return;
+        this.rendered = this.current;
+      } else {
+        // Giới hạn nhịp khung hình
+        if (now - this.lastFrame < this.frameInterval) return;
+        this.lastFrame = now;
+      }
+
+      // Chuột di chuyển mượt theo quán tính
+      this.mouse.x += (this.mouse.tx - this.mouse.x) * 0.05;
+      this.mouse.y += (this.mouse.ty - this.mouse.y) * 0.05;
+
+      const t = this.reducedMotion ? 10.0 : (now - this.start) / 1000;
+      const e = this.current;
+      gl.useProgram(e.prog);
+      gl.enableVertexAttribArray(e.aPos);
+      gl.vertexAttribPointer(e.aPos, 2, gl.FLOAT, false, 0, 0);
+      gl.uniform1f(e.uTime, t);
+      gl.uniform2f(e.uRes, this.canvas.width, this.canvas.height);
+      gl.uniform2f(e.uMouse, this.mouse.x, this.mouse.y);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
   }
 
