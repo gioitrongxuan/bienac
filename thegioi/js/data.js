@@ -481,12 +481,6 @@ export const EVENTS = [
     desc: 'Ở Cairo, Ibn al-Haytham dùng buồng tối chứng minh ánh sáng đi theo đường thẳng vào mắt, và đòi hỏi mọi giả thuyết phải được kiểm chứng bằng thí nghiệm. "Sách Quang học" của ông là tổ tiên của phương pháp khoa học.'
   },
   {
-    id: 'rice', country: 'Trung Quốc', year: -7000, anim: 'farm',
-    title: 'Thuần hoá lúa nước', location: 'Lưu vực Trường Giang, Trung Quốc',
-    lat: 29.0, lon: 119.6,
-    desc: 'Khoảng 9.000 năm trước, cư dân lưu vực Trường Giang bắt đầu gieo trồng và chọn giống lúa dại thành lúa nước. Loài cỏ ven đầm lầy ấy nay là cây lương thực nuôi sống một nửa nhân loại.'
-  },
-  {
     id: 'silkroad', country: 'Uzbekistan', year: -114, anim: 'caravan',
     title: 'Con đường Tơ lụa', location: 'Samarkand, Uzbekistan',
     lat: 39.65, lon: 66.97,
