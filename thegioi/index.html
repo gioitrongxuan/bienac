@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hành trình nhân loại — Lịch sử phát triển của con người</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./libs/three.module.js"
+  }
+}
+</script>
+</head>
+<body>
+
+<div id="globe-container"></div>
+
+<header id="header" class="panel">
+  <h1>Hành trình nhân loại</h1>
+  <p class="subtitle">3,3 triệu năm phát minh &amp; khám phá trên quả địa cầu</p>
+  <p class="hint">Kéo để xoay · Cuộn để thu phóng · Nhấn vào điểm sáng để xem hoạt ảnh</p>
+</header>
+
+<div id="counter" class="panel">0 / 0 sự kiện</div>
+
+<div id="country-panel" class="panel">
+  <label for="country-select">Quốc gia / vùng lãnh thổ</label>
+  <select id="country-select"></select>
+  <div id="country-events" class="hidden"></div>
+</div>
+
+<div id="tooltip" class="hidden"></div>
+
+<div id="timeline" class="panel">
+  <div id="era-buttons"></div>
+  <div class="slider-row">
+    <button id="play-btn" title="Phát dòng thời gian">▶</button>
+    <div class="track-wrap">
+      <div id="ticks"></div>
+      <input type="range" id="time-slider" min="0" max="10000" value="10000" step="1"
+             aria-label="Dòng thời gian">
+    </div>
+    <div id="year-label">2026</div>
+  </div>
+</div>
+
+<div id="modal-overlay" class="hidden">
+  <div id="modal" role="dialog" aria-modal="true">
+    <button id="modal-close" title="Đóng">✕</button>
+    <div id="modal-head">
+      <span id="modal-year" class="badge"></span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-location"></p>
+    </div>
+    <canvas id="modal-canvas"></canvas>
+    <p id="modal-desc"></p>
+  </div>
+</div>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Đang tải địa cầu…</p>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
