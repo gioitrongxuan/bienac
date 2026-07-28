@@ -422,12 +422,35 @@ html, body {
 
 /* ---------- Mobile ---------- */
 @media (max-width: 640px) {
-  #header { max-width: 62vw; padding: 12px 14px; }
+  /* Stack header / counter / country selector in normal flow instead of
+     independently-positioned fixed boxes, so they can never overlap
+     regardless of how much the title/subtitle text wraps. */
+  #top-overlay {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  #header, #counter, #country-panel {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: auto;
+    max-width: none;
+  }
+
+  #header { padding: 12px 14px; }
   #header h1 { font-size: 1.05rem; }
   #header .hint { display: none; }
-  #counter { padding: 8px 12px; font-size: 0.72rem; }
+  #counter { align-self: flex-start; padding: 8px 12px; font-size: 0.72rem; }
   #year-label { min-width: 108px; font-size: 0.85rem; }
   #timeline { padding: 10px 12px 12px; }
-  #country-panel { top: 56px; width: 52vw; min-width: 180px; padding: 10px; }
+  #country-panel { padding: 10px; }
   #country-events { max-height: 26vh; }
 }
